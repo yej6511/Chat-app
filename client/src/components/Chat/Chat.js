@@ -3,10 +3,10 @@ import queryString from 'query-string';
 import io from "socket.io-client";
 
 import TextContainer from '../TextContainer/TextContainer';
-import Messages from '../Messages/Messages';
+import MessageContainer from '../Messages/MessageContainer';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
-//import TeamSelect from '../TeamSelect/TeamSelect'
+import TeamSelect from '../TeamSelect/TeamSelect'
 
 import './Chat.css';
 
@@ -21,7 +21,7 @@ const Chat = ({ location }) => {
   const [team, setTeam] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  //const [text, setText] = useState('');
+  
 
   useEffect(() => {
     const { name, room, team } = queryString.parse(location.search);
@@ -31,7 +31,7 @@ const Chat = ({ location }) => {
     setRoom(room);
     setName(name);
     setTeam(team);
-    //setText(text);
+    
 
     socket.emit('join', { name, room, team }, (error) => {
       if(error) {
@@ -40,7 +40,7 @@ const Chat = ({ location }) => {
     });
   }, [ENDPOINT, location.search]);
 
-  console.log(users);
+  console.log(team);
 
   useEffect(() => {
     socket.on('message', message => {
@@ -59,13 +59,13 @@ const Chat = ({ location }) => {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
-  console.log(messages);
+  //console.log(messages);
   return (
     <div className="outerContainer">
       <div className="container">
           <InfoBar room={room} />
-          <Messages messages={messages} name={name} />
-          {/* <TeamSelect team={team} setTeam={setTeam}/> */}
+          <MessageContainer messages={messages} name={name} team={team} />
+          <TeamSelect setTeam={setTeam}/>
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
       <TextContainer users={users}/>

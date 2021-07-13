@@ -1,17 +1,9 @@
-.form {
+.TeamSelectBox {
     display: flex;
-    border-top: 2px solid #D3D3D3;
+    border-top: 2px solid #cfcfcf;
+    padding: 5px 0px 5px 10px;
+    
   }
-  
-  .input {
-    border: none;
-    border-radius: 0;
-    padding: 5%;
-    width: 80%;
-    font-size: 1.2em;
-  }
-  
-  input:focus, textarea:focus, select:focus{
-    outline: none;
-  }
-  
+.TeamSelectBox label {
+  margin-right: 10px;
+}
