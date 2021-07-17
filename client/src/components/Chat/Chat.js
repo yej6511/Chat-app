@@ -7,6 +7,7 @@ import MessageContainer from '../Messages/MessageContainer';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import TeamSelect from '../TeamSelect/TeamSelect'
+// import Message from "../Messages/Message/Message"
 
 import './Chat.css';
 
@@ -59,6 +60,13 @@ const Chat = ({ location }) => {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
+  console.log(`team: ${team}`)
+  console.log(`selectTeam: ${TeamSelect.setTeam}`)
+
+  if(TeamSelect.setTeam !== team) {
+    MessageContainer.message = "";
+  }
+
   //console.log(messages);
   return (
     <div className="outerContainer">

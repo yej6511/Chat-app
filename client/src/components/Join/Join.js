@@ -16,7 +16,7 @@ export default function SignIn() {
         <h1 className="heading">Join</h1>
         <div>
         <select className="teamCheck" onChange={(event) => setTeam(event.target.value)}>
-          <option selected>팀 선택</option>
+          <option defaultValue>팀 선택</option>
           <option value="1">Team1</option>
           <option value="2">Team2</option>
           <option value="3">Team3</option>
