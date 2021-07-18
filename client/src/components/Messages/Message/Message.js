@@ -28,6 +28,7 @@ const Message = ({ message: { text, user }, name, setTeam }) => {
           <p className="sentText pr-10">{trimmedName}</p> 
           <div className="messageBox backgroundBlue"> 
             <p className="messageText colorWhite">{ReactEmoji.emojify(textReplace)}</p> 
+            <p className="time">{moment().format('A hh:mm')}</p>
           </div> 
         </div>
         </>

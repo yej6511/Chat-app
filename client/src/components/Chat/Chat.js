@@ -7,6 +7,7 @@ import MessageContainer from '../Messages/MessageContainer';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import TeamSelect from '../TeamSelect/TeamSelect'
+import File from '../File/File'
 // import Message from "../Messages/Message/Message"
 
 import './Chat.css';
@@ -75,6 +76,7 @@ const Chat = ({ location }) => {
           <MessageContainer messages={messages} name={name} team={team} />
           <TeamSelect setTeam={setTeam}/>
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+          <File />
       </div>
       <TextContainer users={users}/>
     </div>

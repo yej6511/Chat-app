@@ -1,5 +1,7 @@
 import React from 'react';
-
+// import jQuery from "jquery";
+// import $ from 'jquery';
+//window.$ = window.jQuery = jQuery;
 import './TeamSelect.css';
 const TeamSelect = ({ setTeam }) => (
     <form className="TeamSelectBox"> 

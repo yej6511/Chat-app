@@ -1,6 +1,7 @@
 const app = require('express')();
 const cors = require('cors');
 const http = require('http');
+const fileupload = require("express-fileupload");
 const server = http.createServer(app);
 const PORT = 5000;
 const io = require("socket.io")(server, {
@@ -15,6 +16,8 @@ const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
 app.use(cors());
 app.use(router);
+app.use(fileupload());
+//app.use(express.static("files"));
 
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room, team }, callback) => {
@@ -50,5 +53,16 @@ io.on('connect', (socket) => {
     }
   })
 });
+app.post("/upload", (req, res) => {
+  const newpath = __dirname + "/files/";
+  const file = req.files.file;
+  const filename = file.name;
 
+  file.mv(`${newpath}${filename}`, (err) => {
+    if (err) {
+      res.status(500).send({ message: "File upload failed", code: 200 });
+    }
+    res.status(200).send({ message: "File Uploaded", code: 200 });
+  });
+});
 server.listen(PORT, () => console.log(`Server has started. ${PORT}`));
