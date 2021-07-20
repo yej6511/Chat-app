@@ -23,6 +23,8 @@ const Chat = ({ location }) => {
   const [team, setTeam] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [file, setFile] = useState();
+  const [fileName, setFileName] = useState("");
   
 
   useEffect(() => {
@@ -76,7 +78,7 @@ const Chat = ({ location }) => {
           <MessageContainer messages={messages} name={name} team={team} />
           <TeamSelect setTeam={setTeam}/>
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-          <File />
+          <File file={file} setFile={setFile} fileName={fileName} setFileName={setFileName}/>
       </div>
       <TextContainer users={users}/>
     </div>

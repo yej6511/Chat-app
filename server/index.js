@@ -1,4 +1,5 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const cors = require('cors');
 const http = require('http');
 const fileupload = require("express-fileupload");
@@ -17,7 +18,7 @@ const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 app.use(cors());
 app.use(router);
 app.use(fileupload());
-//app.use(express.static("files"));
+app.use(express.static("files"));
 
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room, team }, callback) => {
@@ -65,4 +66,11 @@ app.post("/upload", (req, res) => {
     res.status(200).send({ message: "File Uploaded", code: 200 });
   });
 });
-server.listen(PORT, () => console.log(`Server has started. ${PORT}`));
+// server.listen(PORT, () => console.log(`Server has started. ${PORT}`));
+server.listen(PORT, () => {
+  try {
+    console.log(`Server up and running on port: ${PORT}`);
+  } catch (error) {
+    console.error(error);
+  }
+});

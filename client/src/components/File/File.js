@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import './File.css';
 
-
-
 function File() {
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
@@ -27,10 +25,6 @@ function File() {
       console.log(ex);
     } 
   };
-
-  
-  
-  
 
   return (
     <div className="fileContainer">
