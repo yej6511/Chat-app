@@ -7,8 +7,10 @@ import MessageContainer from '../Messages/MessageContainer';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import TeamSelect from '../TeamSelect/TeamSelect'
-import File from '../File/File'
-// import Message from "../Messages/Message/Message"
+import {FileUploader} from '../File/FileUploader/FileUploader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import './Chat.css';
 
@@ -21,11 +23,13 @@ const Chat = ({ location }) => {
   const [room, setRoom] = useState('');
   const [users, setUsers] = useState('');
   const [team, setTeam] = useState('');
+  const [selectTeam, setSelectTeam] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [file, setFile] = useState();
-  const [fileName, setFileName] = useState("");
-  
+  const [files, setFiles] = useState([]);
+    const onSuccess = (savedFiles) => {
+        setFiles(savedFiles)
+    };
 
   useEffect(() => {
     const { name, room, team } = queryString.parse(location.search);
@@ -44,7 +48,7 @@ const Chat = ({ location }) => {
     });
   }, [ENDPOINT, location.search]);
 
-  console.log(team);
+  //console.log(team);
 
   useEffect(() => {
     socket.on('message', message => {
@@ -63,22 +67,18 @@ const Chat = ({ location }) => {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
   }
-  console.log(`team: ${team}`)
-  console.log(`selectTeam: ${TeamSelect.setTeam}`)
 
-  if(TeamSelect.setTeam !== team) {
-    MessageContainer.message = "";
-  }
+  console.log(`files:${files}`)
 
-  //console.log(messages);
   return (
     <div className="outerContainer">
       <div className="container">
           <InfoBar room={room} />
-          <MessageContainer messages={messages} name={name} team={team} />
-          <TeamSelect setTeam={setTeam}/>
+          <MessageContainer files={files} messages={messages} name={name} team={team} selectTeam={selectTeam} setTeam={setTeam} setSelectTeam={setSelectTeam} />
+          <TeamSelect setSelectTeam={setSelectTeam}/>
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-          <File file={file} setFile={setFile} fileName={fileName} setFileName={setFileName}/>
+          <FileUploader onSuccess={onSuccess} />
+          <ToastContainer/>
       </div>
       <TextContainer users={users}/>
     </div>

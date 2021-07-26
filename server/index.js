@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const http = require('http');
 const fileupload = require("express-fileupload");
+const multer = require('multer');
 const server = http.createServer(app);
 const PORT = 5000;
 const io = require("socket.io")(server, {
@@ -18,7 +19,7 @@ const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 app.use(cors());
 app.use(router);
 app.use(fileupload());
-app.use(express.static("files"));
+app.use(express.static("public"));
 
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room, team }, callback) => {
@@ -54,19 +55,59 @@ io.on('connect', (socket) => {
     }
   })
 });
-app.post("/upload", (req, res) => {
-  const newpath = __dirname + "/files/";
-  const file = req.files.file;
-  const filename = file.name;
+// app.post("/upload", (req, res) => {
+//   const newpath = __dirname + "/files/";
+//   const file = req.files.file;
+//   const filename = file.name;
 
-  file.mv(`${newpath}${filename}`, (err) => {
-    if (err) {
-      res.status(500).send({ message: "File upload failed", code: 200 });
-    }
-    res.status(200).send({ message: "File Uploaded", code: 200 });
-  });
-});
+//   file.mv(`${newpath}${filename}`, (err) => {
+//     if (err) {
+//       res.status(500).send({ message: "File upload failed", code: 200 });
+//     }
+//     res.status(200).send({ message: "File Uploaded", code: 200 });
+//   });
+// });
 // server.listen(PORT, () => console.log(`Server has started. ${PORT}`));
+
+// app.post('/upload', (req, res) => {
+//   if (req.files === null) {
+//     return res.status(400).json({ msg: 'No file uploaded' });
+//   }
+
+//   const file = req.files.file;
+
+//   file.mv(`${__dirname}/uploads/${file.name}`, err => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).send(err);
+//     }
+
+//     res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+//   });
+// });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'public')
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname)
+  }
+});
+
+const upload = multer({storage}).array('file');
+
+app.post('/upload', (req, res) => {
+  upload(req, res, (err) => {
+      if (err) {
+          return res.status(500).json(err)
+      }
+
+      return res.status(200).send(req.files)
+  })
+});
+
+
+
 server.listen(PORT, () => {
   try {
     console.log(`Server up and running on port: ${PORT}`);
