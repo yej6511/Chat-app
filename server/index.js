@@ -30,8 +30,8 @@ io.on('connect', (socket) => {
     socket.join(user.room);
   
 
-    socket.emit('message', { user: '관리자', text: `${user.team}팀 ${user.name}님이 입장하셨습니다.`});
-    socket.broadcast.to(user.room).emit('message', { user: '관리자', text: `${user.team}팀 ${user.name} 님이 입장하셨습니다.` });
+    socket.emit('message', { id: 0, user: '관리자', text: `${user.team}팀 ${user.name}님이 입장하셨습니다.`});
+    socket.broadcast.to(user.room).emit('message', { id: 0, user: '관리자', text: `${user.team}팀 ${user.name} 님이 입장하셨습니다.` });
 
     io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
 
@@ -40,8 +40,7 @@ io.on('connect', (socket) => {
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
-
-    io.to(user.room).emit('message', { user: user.name, text: message });
+    io.to(user.room).emit('message', { id: message, user: user.name, text: message });
 
     callback();
   });
@@ -55,6 +54,37 @@ io.on('connect', (socket) => {
     }
   })
 });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'public')
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname)
+  }
+});
+
+const upload = multer({storage}).array('file');
+
+app.post('/upload', (req, res) => {
+  upload(req, res, (err) => {
+      if (err) {
+          return res.status(500).json(err)
+      }
+
+      return res.status(200).send(req.files)
+  })
+});
+
+server.listen(PORT, () => {
+  try {
+    console.log(`Server up and running on port: ${PORT}`);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
 // app.post("/upload", (req, res) => {
 //   const newpath = __dirname + "/files/";
 //   const file = req.files.file;
@@ -85,33 +115,3 @@ io.on('connect', (socket) => {
 //     res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
 //   });
 // });
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'public')
-  },
-  filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname)
-  }
-});
-
-const upload = multer({storage}).array('file');
-
-app.post('/upload', (req, res) => {
-  upload(req, res, (err) => {
-      if (err) {
-          return res.status(500).json(err)
-      }
-
-      return res.status(200).send(req.files)
-  })
-});
-
-
-
-server.listen(PORT, () => {
-  try {
-    console.log(`Server up and running on port: ${PORT}`);
-  } catch (error) {
-    console.error(error);
-  }
-});

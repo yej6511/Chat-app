@@ -5,12 +5,11 @@ import $ from 'jquery';
 import ReactEmoji from 'react-emoji';
 import { Preview } from '../../File/Preview/Preview';
 
-const Message = ({ message: { text, user }, name, selectTeam, team, files, setTeam, setSelectTeam }) => {
+const Message = ({ removeMessage, message: { id, text, user }, name, selectTeam, team, files }) => {
   let isSentByCurrentUser = false;
 
   const trimmedName = name.trim().toLowerCase();
   let textReplace = text.trim().toLowerCase();
- 
 
 if(!selectTeam === '' || null || undefined || 0 || NaN) {
   if(team !== selectTeam ) { //true
@@ -20,9 +19,9 @@ if(!selectTeam === '' || null || undefined || 0 || NaN) {
   }
 }
 
-  console.log(`Team:${team}`);
-  console.log(`setSelectTeam: ${selectTeam}`)
-  console.log(`team !== selectTeam: ${team !== selectTeam}`)
+  // console.log(`Team:${team}`);
+  // console.log(`setSelectTeam: ${selectTeam}`)
+  // console.log(`team !== selectTeam: ${team !== selectTeam}`)
 
   if(user === trimmedName) {
     isSentByCurrentUser = true;
@@ -33,15 +32,6 @@ if(!selectTeam === '' || null || undefined || 0 || NaN) {
   }else if(textReplace === '멍청이') {
     textReplace = textReplace.replace(/멍청이/gi,'★');
   }
-
-  // if(team !== selectTeam) {
-  //   // message = '';
-  //   textReplace = '';
-  //   user = '';
-  //   name = '';
-  // }
-  
-
   return (
     isSentByCurrentUser
       ? (
@@ -52,7 +42,10 @@ if(!selectTeam === '' || null || undefined || 0 || NaN) {
             <p className="messageText colorWhite">{ReactEmoji.emojify(textReplace)}</p> 
             <Preview files={files} />
             <p className="time">{moment().format('A hh:mm')}</p>
-          </div> 
+          </div>
+          <div className="removeBtn">
+          <button className="" onClick={() => removeMessage(id)}>x</button>
+          </div>
         </div>
         </>
         )
@@ -65,7 +58,14 @@ if(!selectTeam === '' || null || undefined || 0 || NaN) {
               <Preview files={files} />
             <p className="time">{moment().format('A hh:mm')}</p>
             </div>
+            <div className="removeBtn">
+              { !removeMessage.id === 0 ?
+                <button className="" onClick={() => removeMessage(id)}>x</button>
+                : null
+              }
+          </div>
             <p className="sentText pl-10 ">{user}</p>
+            
           </div>
           </>
         )

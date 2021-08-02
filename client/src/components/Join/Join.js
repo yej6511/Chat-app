@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import './Join.css';
 
-
 export default function SignIn() {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
@@ -12,7 +11,6 @@ export default function SignIn() {
   return (
     <div className="joinOuterContainer">
       <div className="joinInnerContainer">
-        
         <h1 className="heading">Join</h1>
         <div>
         <select className="teamCheck" onChange={(event) => setTeam(event.target.value)}>
@@ -28,8 +26,9 @@ export default function SignIn() {
         <div>
           <input placeholder="Room" className="joinInput mt-20" type="text" onChange={(event) => setRoom(event.target.value)} />
         </div>
-        <Link onClick={e => (!name || !room || !team) ? e.preventDefault() : null} to={`/chat?name=${name}&room=${room}&team=${team}`}>
-          <button className={'button mt-20'} type="submit">Sign In</button>
+        <Link onClick={e => (!name || !room || !team) ? e.preventDefault() : null} to={`/chat?name=${name}&room=${room}&team=${team}`}
+        onKeyPress={event => event.key === 'Enter' ? event.preventDefault() : null}>
+          <button className={'button mt-20'} type="submit" >Sign In</button>
         </Link>
       </div>
     </div>

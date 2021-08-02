@@ -7,11 +7,11 @@ import './TeamSelect.css';
 $(document).ready(function(){
     $("#teamAll").prop("checked", true);
     $("input[name='check']").prop("checked", true);
-    // if ($("input[name='check']:checked").length === 3) {
-    //     $("#teamAll").prop("checked", true);
-    // } else {
-    //     $("#teamAll").prop("checked", false);
-    // }
+    if ($("input[name='check']:checked").length === 3) {
+        $("#teamAll").prop("checked", true);
+    } else {
+        $("#teamAll").prop("checked", false);
+    }
 
     $("input[name='check']").click(function () {
         if ($("input[name='check']:checked").length === 3) {
@@ -28,8 +28,8 @@ $(document).ready(function(){
             $("input[name='check']").prop("checked", false);
         }
     });
-
 });
+
 const TeamSelect = ({ setSelectTeam }) => (
     <form className="TeamSelectBox"> 
         <label className="teamAll">

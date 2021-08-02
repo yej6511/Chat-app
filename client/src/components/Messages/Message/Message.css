@@ -1,3 +1,11 @@
+.removeBtn button {
+  width: 20px;
+  height: 20px;
+  top: 100px;
+  border: 0;
+  outline: 0;
+}
+
 .messageBox {
   background: #f3f3f3;
   border-radius: 20px;

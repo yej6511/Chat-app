@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import queryString from 'query-string';
 import io from "socket.io-client";
 
@@ -24,7 +24,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState('');
   const [team, setTeam] = useState('');
   const [selectTeam, setSelectTeam] = useState([]);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
   const [files, setFiles] = useState([]);
     const onSuccess = (savedFiles) => {
@@ -68,13 +68,22 @@ const Chat = ({ location }) => {
     }
   }
 
-  console.log(`files:${files}`)
+  const removeMessage = id => {
+    // messages.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+    // messages.id 가 id 인 것을 제거함
+    if(!id === 0) {
+    setMessages(messages.filter(message => message.id !== id));
+    }
+    console.log(`id: ${id}`);
+    console.log(`message.id: ${message.id}`);
+  };
 
+  
   return (
     <div className="outerContainer">
       <div className="container">
           <InfoBar room={room} />
-          <MessageContainer files={files} messages={messages} name={name} team={team} selectTeam={selectTeam} setTeam={setTeam} setSelectTeam={setSelectTeam} />
+          <MessageContainer removeMessage={removeMessage} files={files} messages={messages} name={name} team={team} selectTeam={selectTeam} setTeam={setTeam} setSelectTeam={setSelectTeam} />
           <TeamSelect setSelectTeam={setSelectTeam}/>
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
           <FileUploader onSuccess={onSuccess} />
